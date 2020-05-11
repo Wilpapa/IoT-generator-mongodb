@@ -5,11 +5,17 @@ __Generates bucketed IoT temperature data__
 ---
 ## Description
 
-This proof shows how MongoDB supports strongly consistent reads and writes in a sharded environment even when reading from secondaries.
+This script will simulate a recorded set of IoT measures (temperatures).
+Each device sends a measure every minute, some measures can be missed, and measures are recording from a starting date during a number of days.
 
-The proof uses randomly generated persons data (people records each with _firstname_, _lastname_, _age_, _addresses_ and _phones_ fields, plus other fields). The main test continuously updates the _age_ field of random people via replica-set primaries and then reads the _age_ field value back for each corresponding updated person records via the replica-set secondary, verifying that the values match each time. The following MongoDB driver settings are used: _writeConcern:majority_, _readConcern:majority_, _readPreference:secondaryPreferred_, _retryableWrites:true_, _causal consistency enabled_. During the test run, a failover is induced via the Atlas _Test Failover_ feature to check that strong consistency is still achieved, even when servers fail.
+While we could save a single document for each measure, there are better ways taking advantage of the document model. In this script we are using time bucketing : each document contains up to 60 measures (1 by minute) per item per hour.
 
- _About the run environment_: This proof requires high read and write rate. It's strongly advised that all scripts are executed in an AWS EC2 VM running in the same region as your ATLAS Cluster.
+This kind of structure has several advantages
+- lower document cardinality, meaning smaller indexes and less objects to process
+- pre-calculated values (like avg, min, max) allowing for fast retrieval
+- direct access to an hour of values (which makes sense if that's a use case)
+
+A good practice is to use a bucketing method that matches best how data is consumed.
 
 ---
 ## Setup
@@ -33,7 +39,7 @@ use "mongodb+srv://user:password@replicasetFQDN/test" format for ATLAS server (g
 use "mongodb://user:password@hostname" for single node remote server
 etc.
 
-pass the URI as a parameter :
+* pass the URI as a parameter :
 
 ```
 python3 importiot.py "mongodb+srv://user:password@replicasetFQDN/test"
