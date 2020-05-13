@@ -45,8 +45,8 @@ def run(process_id, uri):
             
             values = []
             tempList = []
-            for i in range(60-missed):
-                values.append({ "measureMinute":i,"measuredValue": temp})
+            for k in range(60-missed):
+                values.append({ "measureMinute":k,"measuredValue": temp})
                 tempList.append(temp)
                 temp = changeTemp(temp,13,29,5)
             
