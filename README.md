@@ -35,8 +35,11 @@ There will be as many devices recorded in the database as processes (do not exce
 * Get the URI for your MongoDB Setup. 
 
 use "localhost" for a local mongod 
+
 use "mongodb+srv://user:password@replicasetFQDN/test" format for ATLAS server (get it using "Connect" button)
+
 use "mongodb://user:password@hostname" for single node remote server
+
 etc.
 
 * pass the URI as a parameter :
