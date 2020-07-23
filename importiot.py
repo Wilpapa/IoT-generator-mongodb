@@ -12,7 +12,7 @@ from multiprocessing import Process
 from pymongo import MongoClient, WriteConcern
 
 # Number of processes to launch
-processesNumber = 16
+processesNumber = 16 # must be less than the number of items in deviceList
 processesList = []
 
 # constants
